@@ -36,7 +36,8 @@ export default function Quiz() {
   const handleOptionClick = (option) => {
     if (isQuizOver || showCorrectAnswer) return;
 
-    const newSelectedAnswers = [...selectedAnswers, option];
+    const newSelectedAnswers = [...selectedAnswers];
+    newSelectedAnswers[currentQuestionIndex] = option;
     setSelectedAnswers(newSelectedAnswers);
     setShowCorrectAnswer(true);
   };
@@ -72,11 +73,9 @@ export default function Quiz() {
       <div className="w-full max-w-2xl bg-gray-800 p-8 rounded-lg shadow-lg">
         {!isQuizOver ? (
           <>
-            {/* Question Number Display */}
             <div className="mb-4 text-lg md:text-xl">
               Question {currentQuestionIndex + 1} of {questions.length}
             </div>
-
             <h1 className="text-xl md:text-2xl font-bold mb-6">{questions[currentQuestionIndex].question}</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               {questions[currentQuestionIndex].options.map((option, index) => (
@@ -86,7 +85,9 @@ export default function Quiz() {
                   className={`py-2 px-4 md:py-3 md:px-6 rounded-md text-base md:text-lg transition ${
                     showCorrectAnswer && option === questions[currentQuestionIndex].answer
                       ? 'bg-green-600'
-                      : 'bg-gray-700 hover:bg-gray-600'
+                      : showCorrectAnswer && option === selectedAnswers[currentQuestionIndex] 
+                        ? 'bg-red-600'
+                        : 'bg-gray-700 hover:bg-gray-600'
                   }`}
                   disabled={showCorrectAnswer}
                 >
